@@ -25,8 +25,8 @@ spring:
     locations: classpath:db/migration
 
 jwt:
-  secret: mySecretKey1234567890
-  expiration: 86400000  # 1 day in milliseconds
+  secret: mySuperSecretKey1234567890
+  expiration: 3600000 # 1 day in milliseconds
 
 logging:
   level:

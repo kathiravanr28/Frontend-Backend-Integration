@@ -6,7 +6,7 @@ const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -14,7 +14,7 @@ const Login = () => {
     e.preventDefault();
     setError("");
     try {
-      await login({ username, password });
+      await login({ email, password });
       navigate("/dashboard");
     } catch (err) {
       setError("Invalid credentials");
@@ -27,9 +27,9 @@ const Login = () => {
 
       <form onSubmit={handleSubmit}>
         <input
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Username"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
           required
         />
 

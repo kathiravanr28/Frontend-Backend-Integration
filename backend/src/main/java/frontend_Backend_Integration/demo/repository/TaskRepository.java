@@ -1,4 +1,3 @@
-
 package frontend_backend_integration.demo.repository;
 
 import frontend_backend_integration.demo.model.entity.Task;

@@ -1,7 +1,6 @@
+package frontend_backend_integration.demo.repository;
 
-package frontend_Backend_Integration.demo.repository;
-
-import frontend_Backend_Integration.demo.model.entity.WebSocketMessage;
+import frontend_backend_integration.demo.model.entity.WebSocketMessage;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface WebSocketMessageRepository extends JpaRepository<WebSocketMessage, Long> {}

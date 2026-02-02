@@ -1,4 +1,4 @@
-package frontend_backend_integration.demo.entity;
+package frontend_backend_integration.demo.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,6 +21,12 @@ public class Task {
 
     @Column(length = 500)
     private String description;
+
+    @Column(length = 50)
+    private String status;
+
+    @Column(length = 50)
+    private String priority;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -12,6 +12,7 @@ CREATE TABLE tasks (
     title VARCHAR(255) NOT NULL,
     description TEXT,
     status VARCHAR(50),
+    priority VARCHAR(50),
     user_id BIGINT,
     CONSTRAINT fk_user
         FOREIGN KEY (user_id)

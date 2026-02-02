@@ -1,4 +1,4 @@
-package frontend_backend_integration.demo.entity;
+package frontend_backend_integration.demo.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

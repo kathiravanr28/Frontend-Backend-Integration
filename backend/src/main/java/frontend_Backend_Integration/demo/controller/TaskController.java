@@ -33,6 +33,8 @@ public class TaskController {
     public ResponseEntity<Task> createTask(@RequestBody Task task, @AuthenticationPrincipal UserDetails userDetails) {
         User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
         task.setUser(user);
+        if (task.getStatus() == null) task.setStatus("Pending");
+        if (task.getPriority() == null) task.setPriority("Normal");
         Task savedTask = taskService.saveTask(task);
         return ResponseEntity.ok(savedTask);
     }

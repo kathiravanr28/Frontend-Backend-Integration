@@ -1,28 +1,26 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
+import api from "../api/api";
 
-const Login = () => {
-  const { login } = useAuth();
-  const navigate = useNavigate();
+const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
     try {
-      await login({ email, password });
-      navigate("/dashboard");
+      await api.post("/auth/register", { email, password });
+      navigate("/login");
     } catch (err) {
-      setError("Invalid credentials");
+      setError(err.response?.data || "Registration failed");
     }
   };
 
   return (
     <div>
-      <h2>Login</h2>
+      <h2>Register</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="email"
@@ -38,11 +36,11 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Login</button>
+        <button type="submit">Register</button>
       </form>
       {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 };
 
-export default Login;
+export default Register;

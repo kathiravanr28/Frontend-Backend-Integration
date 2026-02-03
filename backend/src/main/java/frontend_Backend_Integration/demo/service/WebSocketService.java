@@ -1,6 +1,6 @@
 package frontend_backend_integration.demo.service;
 
-import frontend_backend_integration.demo.entity.WebSocketMessage;
+import frontend_backend_integration.demo.model.entity.WebSocketMessage;
 import frontend_backend_integration.demo.repository.WebSocketMessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package frontend_backend_integration.demo.controller;
 
-import frontend_backend_integration.demo.entity.WebSocketMessage;
+import frontend_backend_integration.demo.model.entity.WebSocketMessage;
 import frontend_backend_integration.demo.service.WebSocketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;

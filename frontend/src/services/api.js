@@ -1,27 +1,15 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import Login from "./pages/Login.jsx";
-import Register from "./pages/Register.jsx";
-import Dashboard from "./pages/Dashboard.jsx";
-import PrivateRoute from "./components/PrivateRoute.jsx";
+import axios from "axios";
 
-function App() {
-  return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+const api = axios.create({
+  baseURL: "http://localhost:8080/api",
+});
 
-      <Route
-        path="/dashboard"
-        element={
-          <PrivateRoute>
-            <Dashboard />
-          </PrivateRoute>
-        }
-      />
+api.interceptors.request.use((config) => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (user?.token) {
+    config.headers.Authorization = `Bearer ${user.token}`;
+  }
+  return config;
+});
 
-      <Route path="*" element={<Navigate to="/login" replace />} />
-    </Routes>
-  );
-}
-
-export default App;
+export default api;

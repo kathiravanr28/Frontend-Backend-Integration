@@ -3,20 +3,20 @@ import { useAuth } from "../hooks/useAuth";
 
 const LoginForm = () => {
   const { login } = useAuth();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const submit = async (e) => {
     e.preventDefault();
-    await login({ username, password });
+    await login({ email, password });
   };
 
   return (
     <form onSubmit={submit}>
       <input
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
       />
       <input
         type="password"

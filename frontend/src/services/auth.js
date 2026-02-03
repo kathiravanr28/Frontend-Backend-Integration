@@ -1,19 +1,16 @@
-import api from "../api/api";
+import api from "./api";
 
-export const useAuth = () => {
-  const login = async ({ email, password }) => {
-    const res = await api.post("/auth/login", { email, password });
-    localStorage.setItem("user", JSON.stringify({ token: res.data.token }));
-  };
+export const login = async (email, password) => {
+  const res = await api.post("/auth/login", { email, password });
+  localStorage.setItem("user", JSON.stringify(res.data));
+  return res.data;
+};
 
-  const logout = () => {
-    localStorage.removeItem("user");
-  };
+export const register = async (name, email, password) => {
+  const res = await api.post("/auth/register", { name, email, password });
+  return res.data;
+};
 
-  const getToken = () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    return user?.token;
-  };
-
-  return { login, logout, getToken };
+export const logout = () => {
+  localStorage.removeItem("user");
 };

@@ -1,6 +1,6 @@
 package frontend_backend_integration.demo.service;
 
-import frontend_backend_integration.demo.entity.User;
+import frontend_backend_integration.demo.model.entity.User;
 import frontend_backend_integration.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

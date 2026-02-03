@@ -1,25 +1,33 @@
 import { useState } from "react";
+import { createTask } from "../services/tasks";
+import { Task } from "../types/Task";
 
-const TaskForm = ({ onSave }) => {
+export default function TaskForm({ onTaskAdded }) {
   const [title, setTitle] = useState("");
 
-  const submit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title.trim()) return;
-    onSave({ title });
+
+    // create task object matching Task type
+    const newTask = await createTask({ title, completed: false });
+
+    onTaskAdded(newTask); // notify parent to update list
     setTitle("");
   };
 
   return (
-    <form onSubmit={submit}>
+    <form onSubmit={handleSubmit} style={{ marginBottom: "1rem" }}>
       <input
-        placeholder="New Task"
+        type="text"
+        placeholder="New task"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
+        style={{ padding: "0.5rem", width: "250px" }}
       />
-      <button>Add</button>
+      <button type="submit" style={{ padding: "0.5rem 1rem", marginLeft: "0.5rem" }}>
+        Add
+      </button>
     </form>
   );
-};
-
-export default TaskForm;
+}

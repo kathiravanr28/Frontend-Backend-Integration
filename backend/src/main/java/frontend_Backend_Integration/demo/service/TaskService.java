@@ -14,18 +14,36 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
 
-    // Get all tasks (optional)
-    public List<Task> getAllTasks() {
-        return taskRepository.findAll();
-    }
-
-    // Get tasks by user ID
-    public List<Task> getTasksByUser(User user) {
-        return taskRepository.findByUserId(user.getId());
-    }
-
-    // Save new task
-    public Task saveTask(Task task) {
+    public Task createTask(Task task, User user) {
+        task.setUser(user); // assign task owner
         return taskRepository.save(task);
+    }
+
+    public Task updateTask(Long id, Task updatedTask, User user) {
+        Task existingTask = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+
+        if (!existingTask.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("You are not allowed to update this task");
+        }
+
+        existingTask.setTitle(updatedTask.getTitle());
+        existingTask.setCompleted(updatedTask.isCompleted());
+        return taskRepository.save(existingTask);
+    }
+
+    public void deleteTask(Long id, User user) {
+        Task existingTask = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+
+        if (!existingTask.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("You are not allowed to delete this task");
+        }
+
+        taskRepository.delete(existingTask);
+    }
+
+    public List<Task> getTasks(User user) {
+        return taskRepository.findByUserId(user.getId());
     }
 }

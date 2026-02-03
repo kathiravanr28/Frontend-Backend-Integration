@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useContext } from "react";
 import api from "../services/api";
 
 export const TaskContext = createContext();
@@ -49,3 +49,6 @@ export const TaskProvider = ({ children }) => {
     </TaskContext.Provider>
   );
 };
+
+// ✅ Only addition: custom hook for easy import
+export const useTasks = () => useContext(TaskContext);

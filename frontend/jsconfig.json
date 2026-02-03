@@ -1,10 +1,14 @@
 {
   "compilerOptions": {
-    "target": "ES6",       // or ESNext
-    "module": "commonjs",
-    "checkJs": true,       // optional, only if you want VSCode to check JS types
-    "baseUrl": ".",        // for module resolution
-    "paths": {}
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["*"]
+    },
+    "jsx": "react-jsx",   // <-- add this line
+    "checkJs": false      // <-- optional, turn off JS type checking
   },
   "exclude": ["node_modules", "dist"]
 }

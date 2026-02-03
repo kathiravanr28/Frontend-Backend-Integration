@@ -1,6 +1,7 @@
 import React from "react";
 import TaskForm from "../components/TaskForm.jsx";
 import TaskBoard from "../components/TaskBoard.jsx";
+import "../styles/Dashboard.css";
 
 export default function Dashboard() {
   return (

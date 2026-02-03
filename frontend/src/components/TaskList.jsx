@@ -1,3 +1,4 @@
+import "../styles/TaskList.css";
 export default function TaskList({ tasks, onDelete }) {
   return (
     <ul>

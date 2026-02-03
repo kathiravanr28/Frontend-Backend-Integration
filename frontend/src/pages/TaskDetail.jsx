@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom";
+import "../styles/TaskDetail.css";
 
 const TaskDetail = () => {
   const { id } = useParams();

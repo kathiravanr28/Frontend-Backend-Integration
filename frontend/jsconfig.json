@@ -1,12 +1,10 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
-    "paths": {
-      "@components/*": ["components/*"],
-      "@pages/*": ["pages/*"],
-      "@context/*": ["context/*"],
-      "@services/*": ["services/*"],
-      "@hooks/*": ["hooks/*"]
-    }
-  }
+    "target": "ES6",       // or ESNext
+    "module": "commonjs",
+    "checkJs": true,       // optional, only if you want VSCode to check JS types
+    "baseUrl": ".",        // for module resolution
+    "paths": {}
+  },
+  "exclude": ["node_modules", "dist"]
 }

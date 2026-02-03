@@ -4,29 +4,27 @@ import { login as loginService } from "../services/auth";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("user"))
-  );
+  const [token, setToken] = useState(localStorage.getItem("token"));
 
   useEffect(() => {
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
+    if (token) {
+      localStorage.setItem("token", token);
     } else {
-      localStorage.removeItem("user");
+      localStorage.removeItem("token");
     }
-  }, [user]);
+  }, [token]);
 
   const login = async (credentials) => {
     const data = await loginService(credentials);
-    setUser(data);
+    setToken(data.token);
   };
 
   const logout = () => {
-    setUser(null);
+    setToken(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ token, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

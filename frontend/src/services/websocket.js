@@ -1,33 +1,25 @@
-let socket = null;
+import SockJS from "sockjs-client";
+import { Client } from "@stomp/stompjs";
 
-export const connectWebSocket = (url, onMessage) => {
-  if (socket) return; // prevent multiple connections
+let stompClient = null;
 
-  socket = new WebSocket(url);
+export const connectWebSocket = (onMessageReceived) => {
+  const socket = new SockJS("http://localhost:8080/ws");
 
-  socket.onopen = () => {
-    console.log("WebSocket connected");
-  };
+  stompClient = new Client({
+    webSocketFactory: () => socket,
+    reconnectDelay: 5000,
+    onConnect: () => {
+      stompClient.subscribe("/topic/tasks", (message) => {
+        const data = JSON.parse(message.body);
+        onMessageReceived(data);
+      });
+    },
+  });
 
-  socket.onmessage = (event) => {
-    if (onMessage) {
-      onMessage(JSON.parse(event.data));
-    }
-  };
-
-  socket.onerror = (error) => {
-    console.error("WebSocket error:", error);
-  };
-
-  socket.onclose = () => {
-    console.log("WebSocket disconnected");
-    socket = null;
-  };
+  stompClient.activate();
 };
 
 export const disconnectWebSocket = () => {
-  if (socket) {
-    socket.close();
-    socket = null;
-  }
+  if (stompClient) stompClient.deactivate();
 };

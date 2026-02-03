@@ -2,7 +2,6 @@ package frontend_backend_integration.demo.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -11,16 +10,18 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class WebSocketMessage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 100)
     private String sender;
 
+    @Column(columnDefinition = "TEXT")
     private String message;
 
-    private LocalDateTime timestamp;
+    @Column(nullable = false)
+    private LocalDateTime timestamp = LocalDateTime.now();
 }

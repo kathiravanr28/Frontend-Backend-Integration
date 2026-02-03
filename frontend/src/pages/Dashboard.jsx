@@ -1,52 +1,34 @@
 import { useEffect, useState } from "react";
-import api from "../api/api";
+import { getTasks, createTask, deleteTask } from "../services/taskService";
 import TaskForm from "../components/TaskForm";
 import TaskList from "../components/TaskList";
-import { useAuth } from "../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
 
-const Dashboard = () => {
+export default function Dashboard() {
   const [tasks, setTasks] = useState([]);
-  const { logout } = useAuth();
-  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchTasks();
+    loadTasks();
   }, []);
 
-  const fetchTasks = async () => {
-    const res = await api.get("/tasks");
-    setTasks(res.data);
+  const loadTasks = async () => {
+    const data = await getTasks();
+    setTasks(data);
   };
 
   const addTask = async (task) => {
-    const res = await api.post("/tasks", task);
-    setTasks([...tasks, res.data]);
+    await createTask(task);
+    loadTasks();
   };
 
-  const editTask = async (id, updatedTask) => {
-    await api.put(`/tasks/${id}`, updatedTask);
-    fetchTasks();
-  };
-
-  const deleteTask = async (id) => {
-    await api.delete(`/tasks/${id}`);
-    fetchTasks();
-  };
-
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
+  const removeTask = async (id) => {
+    await deleteTask(id);
+    loadTasks();
   };
 
   return (
-    <div>
-      <h2>Dashboard</h2>
-      <button onClick={handleLogout}>Logout</button>
-      <TaskForm onSave={addTask} />
-      <TaskList tasks={tasks} onEdit={editTask} onDelete={deleteTask} />
-    </div>
+    <>
+      <TaskForm onTaskAdded={addTask} />
+      <TaskList tasks={tasks} onDelete={removeTask} />
+    </>
   );
-};
-
-export default Dashboard;
+}

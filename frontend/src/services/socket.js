@@ -1,28 +1,20 @@
+import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 
 let stompClient = null;
 
-export const connectWebSocket = (onMessage) => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  if (!user?.token) return;
-
+export const connectWebSocket = (onMessageReceived) => {
+  const socket = new SockJS("http://localhost:8080/ws");
   stompClient = new Client({
-    brokerURL: "ws://localhost:8080/ws",
-    connectHeaders: {
-      Authorization: `Bearer ${user.token}`,
-    },
-    debug: (str) => console.log(str),
+    webSocketFactory: () => socket,
     reconnectDelay: 5000,
-    onConnect: () => console.log("WebSocket connected"),
-    onStompError: (frame) => console.error(frame),
+    onConnect: () => {
+      stompClient.subscribe("/topic/tasks", (message) => {
+        const data = JSON.parse(message.body);
+        onMessageReceived(data);
+      });
+    },
   });
-
-  stompClient.onConnect = () => {
-    stompClient.subscribe("/topic/tasks", (msg) => {
-      onMessage(JSON.parse(msg.body));
-    });
-  };
-
   stompClient.activate();
 };
 

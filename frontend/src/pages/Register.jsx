@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api/api";
+import api from "../services/api";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -11,10 +11,14 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post("/auth/register", { email, password });
+      await api.post("/auth/register", {
+        name: email.split("@")[0],
+        email,
+        password,
+      });
       navigate("/login");
     } catch (err) {
-      setError(err.response?.data || "Registration failed");
+      setError("Registration failed");
     }
   };
 

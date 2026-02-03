@@ -1,12 +1,15 @@
 package frontend_backend_integration.demo.service;
 
-import frontend_backend_integration.demo.model.entity.Task;
-import frontend_backend_integration.demo.model.entity.User;
+import frontend_backend_integration.demo.dto.TaskDTO;
+import frontend_backend_integration.demo.entity.Task;
+import frontend_backend_integration.demo.entity.User;
+import frontend_backend_integration.demo.mapper.TaskMapper;
 import frontend_backend_integration.demo.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -14,36 +17,37 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
 
-    public Task createTask(Task task, User user) {
-        task.setUser(user); // assign task owner
-        return taskRepository.save(task);
+    public List<TaskDTO> getTasks(User user) {
+        return taskRepository.findByUser(user)
+                .stream()
+                .map(TaskMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public Task updateTask(Long id, Task updatedTask, User user) {
-        Task existingTask = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task not found"));
+    public TaskDTO createTask(Task task, User user) {
+        task.setUser(user);
+        return TaskMapper.toDTO(taskRepository.save(task));
+    }
 
-        if (!existingTask.getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("You are not allowed to update this task");
-        }
+    public TaskDTO updateTask(Long id, Task updatedTask, User user) {
+        Task task = taskRepository.findById(id)
+                .filter(t -> t.getUser().getId().equals(user.getId()))
+                .orElseThrow(() -> new RuntimeException("Unauthorized"));
 
-        existingTask.setTitle(updatedTask.getTitle());
-        existingTask.setCompleted(updatedTask.isCompleted());
-        return taskRepository.save(existingTask);
+        task.setTitle(updatedTask.getTitle());
+        task.setDescription(updatedTask.getDescription());
+        task.setStatus(updatedTask.getStatus());
+        task.setPriority(updatedTask.getPriority());
+        task.setCompleted(updatedTask.isCompleted());
+
+        return TaskMapper.toDTO(taskRepository.save(task));
     }
 
     public void deleteTask(Long id, User user) {
-        Task existingTask = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task not found"));
+        Task task = taskRepository.findById(id)
+                .filter(t -> t.getUser().getId().equals(user.getId()))
+                .orElseThrow(() -> new RuntimeException("Unauthorized"));
 
-        if (!existingTask.getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("You are not allowed to delete this task");
-        }
-
-        taskRepository.delete(existingTask);
-    }
-
-    public List<Task> getTasks(User user) {
-        return taskRepository.findByUserId(user.getId());
+        taskRepository.delete(task);
     }
 }
